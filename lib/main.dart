@@ -13,8 +13,7 @@ Future<Map> getData() async {
 
 void main() => runApp(MaterialApp(
       home: Home(),
-      theme: ThemeData(hintColor: Colors.amber,
-          primaryColor: Colors.amber),
+      theme: ThemeData(hintColor: Colors.amber, primaryColor: Colors.amber),
     ));
 
 class Home extends StatefulWidget {
@@ -23,7 +22,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   final realControler = TextEditingController();
   final dolaControler = TextEditingController();
   final euroControler = TextEditingController();
@@ -31,22 +29,22 @@ class _HomeState extends State<Home> {
   double dola;
   double euro;
 
-  void _realChange(String text){
+  void _realChange(String text) {
     double real = double.parse(text);
-    dolaControler.text = (real/dola).toStringAsFixed(2);
-    euroControler.text = (real/euro).toStringAsFixed(2);
+    dolaControler.text = (real / dola).toStringAsFixed(2);
+    euroControler.text = (real / euro).toStringAsFixed(2);
   }
 
-  void _dolaChange(String text){
+  void _dolaChange(String text) {
     double dola = double.parse(text);
     realControler.text = (dola * this.dola).toStringAsFixed(2);
-    euroControler.text = (dola*this.dola/euro).toStringAsFixed(2);
+    euroControler.text = (dola * this.dola / euro).toStringAsFixed(2);
   }
 
-  void _euroChange(String text){
+  void _euroChange(String text) {
     double euro = double.parse(text);
     realControler.text = (euro * this.euro).toStringAsFixed(2);
-    dolaControler.text = (euro * this.euro/dola).toStringAsFixed(2);
+    dolaControler.text = (euro * this.euro / dola).toStringAsFixed(2);
   }
 
   @override
@@ -88,9 +86,11 @@ class _HomeState extends State<Home> {
                         children: <Widget>[
                           Icon(Icons.monetization_on,
                               size: 150, color: Colors.amber),
-                          BuildTextFild("Reais", "\$", realControler, _realChange),
+                          BuildTextFild(
+                              "Reais", "\$", realControler, _realChange),
                           Divider(),
-                          BuildTextFild("Dolares", "US", dolaControler, _dolaChange),
+                          BuildTextFild(
+                              "Dolares", "US", dolaControler, _dolaChange),
                           Divider(),
                           BuildTextFild("Euro", "€", euroControler, _euroChange)
                         ],
@@ -103,17 +103,16 @@ class _HomeState extends State<Home> {
 }
 
 //Função de textos
-Widget BuildTextFild(String label, String prefix, TextEditingController c, Function f) {
+Widget BuildTextFild(
+    String label, String prefix, TextEditingController c, Function f) {
   return TextField(
-    controller: c,
-    decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(color: Colors.amber),
-        border: OutlineInputBorder(),
-        prefixText: prefix),
-    style: TextStyle(color: Colors.amber, fontSize: 25
-    ),
-    keyboardType: TextInputType.number,
-    onChanged: f
-  );
+      controller: c,
+      decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.amber),
+          border: OutlineInputBorder(),
+          prefixText: prefix),
+      style: TextStyle(color: Colors.amber, fontSize: 25),
+      keyboardType: TextInputType.number,
+      onChanged: f);
 }
