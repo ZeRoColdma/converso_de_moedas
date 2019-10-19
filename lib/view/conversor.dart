@@ -1,3 +1,4 @@
+import 'package:conversor_de_moeda/widgets/textControllers.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -70,81 +71,72 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("\$ Conversor de Moedas \$"),
-        backgroundColor: Colors.amber[300],
-        centerTitle: true,
-      ),
-      body: FutureBuilder<Map>(
-        future: getData(),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-              return Center(
-                child: Text(
-                  "Carregando Dados",
-                  style: TextStyle(color: Colors.amber[300], fontSize: 25.0),
-                  textAlign: TextAlign.center,
-                ),
-              );
-            default:
-              if (snapshot.hasError) {
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("\$ Conversor de Moedas \$"),
+          backgroundColor: Colors.amber[300],
+          centerTitle: true,
+        ),
+        body: FutureBuilder<Map>(
+          future: getData(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.waiting:
                 return Center(
                   child: Text(
-                    "Erro",
+                    "Carregando Dados",
                     style: TextStyle(color: Colors.amber[300], fontSize: 25.0),
                     textAlign: TextAlign.center,
                   ),
                 );
-              } else {
-                dola = snapshot.data["results"]["currencies"]["USD"]["buy"];
-                euro = snapshot.data["results"]["currencies"]["EUR"]["buy"];
-                libra = snapshot.data["results"]["currencies"]["GBP"]["buy"];
-                btc = snapshot.data["results"]["currencies"]["BTC"]["buy"];
+              default:
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      "Sem conexão com rede",
+                      style:
+                          TextStyle(color: Colors.amber[300], fontSize: 25.0),
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                } else {
+                  dola = snapshot.data["results"]["currencies"]["USD"]["buy"];
+                  euro = snapshot.data["results"]["currencies"]["EUR"]["buy"];
+                  libra = snapshot.data["results"]["currencies"]["GBP"]["buy"];
+                  btc = snapshot.data["results"]["currencies"]["BTC"]["buy"];
 
-                return SingleChildScrollView(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Icon(Icons.monetization_on,
-                          size: 100, color: Colors.amber[300]),
-                      BuildTextFild("Reais", "\$  ", realController, _realChange),
-                      Divider(),
-                      BuildTextFild(
-                          "Dolares", "US  ", dolaController, _dolaChange),
-                      Divider(),
-                      BuildTextFild("Euro", "€  ", euroController, _euroChange),
-                      Divider(),
-                      BuildTextFild("Libra Esterlina", "£  ", libraController,
-                          _libraChange),
-                      Divider(),
-                      BuildTextFild(
-                          "BitCoin", "BTC  ", bitController, _bitChange),
-                    ],
-                  ),
-                );
-              }
-          }
-        },
+                  return SingleChildScrollView(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Icon(Icons.monetization_on,
+                            size: 100, color: Colors.amber[300]),
+                        BuildTextFild(
+                            "Reais", "\$  ", realController, _realChange),
+                        Divider(),
+                        BuildTextFild(
+                            "Dolares", "US  ", dolaController, _dolaChange),
+                        Divider(),
+                        BuildTextFild(
+                            "Euro", "€  ", euroController, _euroChange),
+                        Divider(),
+                        BuildTextFild("Libra Esterlina", "£  ", libraController,
+                            _libraChange),
+                        Divider(),
+                        BuildTextFild(
+                            "BitCoin", "BTC  ", bitController, _bitChange),
+                      ],
+                    ),
+                  );
+                }
+            }
+          },
+        ),
       ),
     );
   }
 }
 
-//Função de textos
-Widget BuildTextFild(
-    String label, String prefix, TextEditingController c, Function f) {
-  return TextField(
-      controller: c,
-      decoration: InputDecoration(
-          labelText: label,
-          labelStyle: TextStyle(color: Colors.amber[900]),
-          border: OutlineInputBorder(),
-          prefixText: prefix),
-      style: TextStyle(color: Colors.amber[900], fontSize: 25),
-      keyboardType: TextInputType.number,
-      onChanged: f);
-}
